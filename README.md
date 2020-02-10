@@ -1,1 +1,7 @@
-# dgl_app_setup
+# Setup for DGL-based Application Packages
+
+## CI
+
+## Documentation
+
+## Release
