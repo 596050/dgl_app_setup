@@ -1,7 +1,7 @@
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
 
-pip install -y dgl --pre
+pip install dgl --pre
 
 ENDLOCAL
 EXIT /B
