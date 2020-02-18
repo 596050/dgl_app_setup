@@ -7,6 +7,8 @@ List of affected files:
 """
 import os
 import re
+
+app = 'myapp'
 # current version
 # We use the version of the incoming release for code
 # that is under development
@@ -44,10 +46,10 @@ def main():
     curr_dir = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
     proj_root = os.path.abspath(os.path.join(curr_dir, ".."))
     # python path
-    update(os.path.join(proj_root, "python", "app", "libinfo.py"),
+    update(os.path.join(proj_root, "python", app, "libinfo.py"),
            r"(?<=__version__ = \")[.0-9a-z]+", __version__)
     # conda
-    for path in ["app"]:
+    for path in [app]:
         update(os.path.join(proj_root, "conda", path, "meta.yaml"),
                "(?<=version: \")[.0-9a-z]+", __version__)
 

@@ -1,0 +1,28 @@
+package:
+  name: myapp{{ environ.get('APP_PACKAGE_SUFFIX', '') }}
+  version: "0.1.0"
+
+source:
+  git_rev: master
+  git_url: https://github.com/mufeili/dgl_app_setup.git
+
+requirements:
+  build:
+    - python {{ python }}
+    - setuptools
+    - cmake
+    - git
+    - cython
+  run:
+    - python
+    - dgl{{ environ.get('DGL_PACKAGE_SUFFIX', '') }}
+    - requests
+
+test:
+  imports:
+    - myapp
+
+about:
+  home: https://github.com/mufeili/dgl_app_setup.git
+  license_file: {{ environ.get('SRC_DIR') }}/LICENSE
+  license: Apache
