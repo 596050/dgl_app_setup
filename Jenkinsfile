@@ -1,8 +1,10 @@
 #!/usr/bin/env groovy
 
-dgl_linux_libs = "build/libdgl.so, build/runUnitTests, python/dgl/_ffi/_cy3/core.cpython-36m-x86_64-linux-gnu.so"
-// Currently DGL on Windows is not working with Cython yet
-dgl_win64_libs = "build\\dgl.dll, build\\runUnitTests.exe"
+app_linux_libs = ""
+// Currently Windows is not working with Cython yet
+app_win64_libs = ""
+
+app = "myapp"
 
 def init_git() {
   sh "rm -rf *"
@@ -17,33 +19,33 @@ def init_git_win64() {
 
 // pack libraries for later use
 def pack_lib(name, libs) {
-  echo "Packing ${libs} into ${name}"
-  stash includes: libs, name: name
+  //echo "Packing ${libs} into ${name}"
+  //stash includes: libs, name: name
 }
 
 // unpack libraries saved before
 def unpack_lib(name, libs) {
-  unstash name
-  echo "Unpacked ${libs} from ${name}"
+  //unstash name
+  //echo "Unpacked ${libs} from ${name}"
 }
 
 def build_linux(dev) {
   init_git()
-  sh "bash tests/scripts/build_dgl.sh ${dev}"
-  pack_lib("dgl-${dev}-linux", dgl_linux_libs)
+  sh "bash tests/scripts/build.sh ${dev}"
+  pack_lib("app-${dev}-linux", app_linux_libs)
 }
 
 def build_win64(dev) {
   /* Assuming that Windows slaves are already configured with MSBuild VS2017,
    * CMake and Python/pip/setuptools etc. */
   init_git_win64()
-  bat "CALL tests\\scripts\\build_dgl.bat"
-  pack_lib("dgl-${dev}-win64", dgl_win64_libs)
+  bat "CALL tests\\scripts\\build.bat"
+  pack_lib("app-${dev}-win64", app_win64_libs)
 }
 
 def unit_test_linux(backend, dev) {
   init_git()
-  unpack_lib("dgl-${dev}-linux", dgl_linux_libs)
+  unpack_lib("app-${dev}-linux", app_linux_libs)
   timeout(time: 10, unit: 'MINUTES') {
     sh "bash tests/scripts/task_unit_test.sh ${backend} ${dev}"
   }
@@ -51,23 +53,15 @@ def unit_test_linux(backend, dev) {
 
 def unit_test_win64(backend, dev) {
   init_git_win64()
-  unpack_lib("dgl-${dev}-win64", dgl_win64_libs)
+  unpack_lib("app-${dev}-win64", app_win64_libs)
   timeout(time: 2, unit: 'MINUTES') {
     bat "CALL tests\\scripts\\task_unit_test.bat ${backend}"
   }
 }
 
-def kg_test_linux(backend, dev) {
-  init_git()
-  unpack_lib("dgl-${dev}-linux", dgl_linux_libs)
-  timeout(time: 20, unit: 'MINUTES') {
-    sh "bash tests/scripts/task_kg_test.sh ${backend} ${dev}"
-  }
-}
-
 def example_test_linux(backend, dev) {
   init_git()
-  unpack_lib("dgl-${dev}-linux", dgl_linux_libs)
+  unpack_lib("app-${dev}-linux", app_linux_libs)
   timeout(time: 20, unit: 'MINUTES') {
     sh "bash tests/scripts/task_example_test.sh ${dev}"
   }
@@ -75,20 +69,19 @@ def example_test_linux(backend, dev) {
 
 def example_test_win64(backend, dev) {
   init_git_win64()
-  unpack_lib("dgl-${dev}-win64", dgl_win64_libs)
+  unpack_lib("app-${dev}-win64", app_win64_libs)
   timeout(time: 20, unit: 'MINUTES') {
     bat "CALL tests\\scripts\\task_example_test.bat ${dev}"
   }
 }
 
-def tutorial_test_linux(backend) {
-  init_git()
-  unpack_lib("dgl-cpu-linux", dgl_linux_libs)
-  timeout(time: 20, unit: 'MINUTES') {
-    sh "bash tests/scripts/task_${backend}_tutorial_test.sh"
-  }
-}
-
+//def tutorial_test_linux(backend) {
+//  init_git()
+//  unpack_lib("app-cpu-linux", app_linux_libs)
+//  timeout(time: 20, unit: 'MINUTES') {
+//    sh "bash tests/scripts/task_${backend}_tutorial_test.sh"
+//  }
+//}
 
 pipeline {
   agent any
@@ -116,7 +109,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/dgl-ci-cpu:conda" 
+              image "dgllib/${app}-ci-cpu:conda" 
             }
           }
           steps {
@@ -132,7 +125,7 @@ pipeline {
           agent {
             docker {
               label "linux-cpu-node"
-              image "dgllib/dgl-ci-gpu:conda"
+              image "dgllib/${app}-ci-gpu:conda"
               args "-u root"
             }
           }
@@ -168,7 +161,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/dgl-ci-cpu:conda" 
+              image "dgllib/${app}-ci-cpu:conda" 
             }
           }
           stages {
@@ -188,7 +181,7 @@ pipeline {
           agent { 
             docker { 
               label "linux-gpu-node"
-              image "dgllib/dgl-ci-gpu:conda" 
+              image "dgllib/${app}-ci-gpu:conda" 
               args "--runtime nvidia"
             }
           }
@@ -209,7 +202,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/dgl-ci-cpu:conda" 
+              image "dgllib/${app}-ci-cpu:conda" 
             }
           }
           stages {
@@ -223,11 +216,11 @@ pipeline {
                 example_test_linux("pytorch", "cpu")
               }
             }
-            stage("Tutorial test") {
-              steps {
-                tutorial_test_linux("pytorch")
-              }
-            }
+            //stage("Tutorial test") {
+            //  steps {
+            //    tutorial_test_linux("pytorch")
+            //  }
+            //}
           }
           post {
             always {
@@ -259,7 +252,7 @@ pipeline {
           agent {
             docker {
               label "linux-gpu-node"
-              image "dgllib/dgl-ci-gpu:conda"
+              image "dgllib/${app}-ci-gpu:conda"
               args "--runtime nvidia"
             }
           }
@@ -286,7 +279,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/dgl-ci-cpu:conda" 
+              image "dgllib/${app}-ci-cpu:conda" 
             }
           }
           stages {
@@ -295,11 +288,6 @@ pipeline {
                 unit_test_linux("mxnet", "cpu")
               }
             }
-            //stage("Tutorial test") {
-            //  steps {
-            //    tutorial_test_linux("mxnet")
-            //  }
-            //}
           }
           post {
             always {
@@ -311,7 +299,7 @@ pipeline {
           agent {
             docker {
               label "linux-gpu-node" 
-              image "dgllib/dgl-ci-gpu:conda"
+              image "dgllib/${app}-ci-gpu:conda"
               args "--runtime nvidia"
             }
           }
@@ -320,61 +308,6 @@ pipeline {
               steps {
                 sh "nvidia-smi"
                 unit_test_linux("mxnet", "gpu")
-              }
-            }
-          }
-          post {
-            always {
-              cleanWs disableDeferredWipeout: true, deleteDirs: true
-            }
-          }
-        }
-      }
-    }
-    stage("App") {
-      parallel {
-        stage("Knowledge Graph CPU") {
-          agent { 
-            docker {
-              label "linux-cpu-node"
-              image "dgllib/dgl-ci-cpu:conda" 
-            }
-          }
-          stages {
-            stage("Torch test") {
-              steps {
-                kg_test_linux("pytorch", "cpu")
-              }
-            }
-            stage("MXNet test") {
-              steps {
-                kg_test_linux("mxnet", "cpu")
-              }
-            }
-          }
-          post {
-            always {
-              cleanWs disableDeferredWipeout: true, deleteDirs: true
-            }
-          }
-        }
-        stage("Knowledge Graph GPU") {
-          agent {
-            docker {
-              label "linux-gpu-node"
-              image "dgllib/dgl-ci-gpu:conda"
-              args "--runtime nvidia"
-            }
-          }
-          stages {
-            stage("Torch test") {
-              steps {
-                kg_test_linux("pytorch", "gpu")
-              }
-            }
-            stage("MXNet test") {
-              steps {
-                kg_test_linux("mxnet", "gpu")
               }
             }
           }
