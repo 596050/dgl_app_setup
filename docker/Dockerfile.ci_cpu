@@ -1,1 +1,1 @@
-FROM dgllib/dgl-ci-cpu
+FROM dgllib/dgl-ci-cpu:conda
