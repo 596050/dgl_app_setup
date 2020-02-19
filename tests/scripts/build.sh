@@ -23,4 +23,5 @@ else
 fi
 unzip dgl*.whl
 rm dgl*.whl
+ls -al
 popd
