@@ -9,11 +9,11 @@ IF x%1x==xx (
 )
 CALL workon %BUILD_TAG%
 
-SET PYTHONPATH=!CD!\python;!PYTHONPATH!
+SET PYTHONPATH=!CD!\python;!CD!\_deps\dgl;!PYTHONPATH!
 SET DGLBACKEND=!BACKEND!
 SET DGL_DOWNLOAD_DIR=!CD!
 
-python -m pip install pytest || EXIT /B 1
+python -m pip install pytest --user || EXIT /B 1
 python -m pytest -v --junitxml=pytest_unit.xml tests\unittests || EXIT /B 1
 
 ENDLOCAL

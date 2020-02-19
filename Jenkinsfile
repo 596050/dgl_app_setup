@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
-app_linux_libs = ""
+app_linux_libs = "_deps"
 // Currently Windows is not working with Cython yet
-app_win64_libs = ""
+app_win64_libs = "_deps"
 
 app = "myapp"
 
@@ -19,14 +19,14 @@ def init_git_win64() {
 
 // pack libraries for later use
 def pack_lib(name, libs) {
-  //echo "Packing ${libs} into ${name}"
-  //stash includes: libs, name: name
+  echo "Packing ${libs} into ${name}"
+  stash includes: libs, name: name
 }
 
 // unpack libraries saved before
 def unpack_lib(name, libs) {
-  //unstash name
-  //echo "Unpacked ${libs} from ${name}"
+  unstash name
+  echo "Unpacked ${libs} from ${name}"
 }
 
 def build_linux(dev) {

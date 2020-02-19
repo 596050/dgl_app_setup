@@ -1,4 +1,5 @@
 """Core package"""
+import dgl
 
 __all__ = ['say_hello']
 
@@ -15,5 +16,6 @@ def say_hello(name):
     bool
         Succeed or not.
     """
+    print('DGL version: {}'.format(dgl.__version__))
     print('{}: Heeeeeeeeeeeeeeeeeello!'.format(name))
     return True
