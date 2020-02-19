@@ -56,7 +56,13 @@ def unit_test_linux(backend, dev) {
 
 def unit_test_win64(backend, dev) {
   init_git_win64()
-  unpack_dgl("app-${dev}-win64", app_win64_libs)
+  unstash name
+  echo "Unpacked ${libs} from ${name}"
+  dir("_deps") {
+    sh "dir"
+    sh "unzip dgl.whl"
+  }
+  //unpack_dgl("app-${dev}-win64", app_win64_libs)
   timeout(time: 2, unit: 'MINUTES') {
     bat "CALL tests\\scripts\\task_unit_test.bat ${backend}"
   }
