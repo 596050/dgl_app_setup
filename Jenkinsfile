@@ -138,19 +138,19 @@ pipeline {
             }
           }
         }
-        stage("CPU Build (Win64)") {
-          // Windows build machines are manually added to Jenkins master with
-          // "windows" label as permanent agents.
-          agent { label "windows" }
-          steps {
-            build_win64("cpu")
-          }
-          post {
-            always {
-              cleanWs disableDeferredWipeout: true, deleteDirs: true
-            }
-          }
-        }
+        //stage("CPU Build (Win64)") {
+        //  // Windows build machines are manually added to Jenkins master with
+        //  // "windows" label as permanent agents.
+        //  agent { label "windows" }
+        //  steps {
+        //    build_win64("cpu")
+        //  }
+        //  post {
+        //    always {
+        //      cleanWs disableDeferredWipeout: true, deleteDirs: true
+        //    }
+        //  }
+        //}
         // Currently we don't have Windows GPU build machines
       }
     }
@@ -228,26 +228,26 @@ pipeline {
             }
           }
         }
-        stage("Torch CPU (Win64)") {
-          agent { label "windows" }
-          stages {
-            stage("Unit test") {
-              steps {
-                unit_test_win64("pytorch", "cpu")
-              }
-            }
-            stage("Example test") {
-              steps {
-                example_test_win64("pytorch", "cpu")
-              }
-            }
-          }
-          post {
-            always {
-              cleanWs disableDeferredWipeout: true, deleteDirs: true
-            }
-          }
-        }
+        //stage("Torch CPU (Win64)") {
+        //  agent { label "windows" }
+        //  stages {
+        //    stage("Unit test") {
+        //      steps {
+        //        unit_test_win64("pytorch", "cpu")
+        //      }
+        //    }
+        //    stage("Example test") {
+        //      steps {
+        //        example_test_win64("pytorch", "cpu")
+        //      }
+        //    }
+        //  }
+        //  post {
+        //    always {
+        //      cleanWs disableDeferredWipeout: true, deleteDirs: true
+        //    }
+        //  }
+        //}
         stage("Torch GPU") {
           agent {
             docker {
