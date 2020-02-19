@@ -28,9 +28,9 @@ def unpack_dgl(name, libs) {
   unstash name
   echo "Unpacked ${libs} from ${name}"
   if (isUnix()) {
-    sh "unzip _deps/dgl.whl -d _deps"
+    sh "pip install _deps/dgl.whl --user"
   } else {
-    bat "CALL tests\\scripts\\unzip_dgl.bat"
+    bat "pip install _deps/dgl.whl --user"
   }
 }
 
