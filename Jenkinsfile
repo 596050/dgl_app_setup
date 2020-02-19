@@ -27,7 +27,9 @@ def pack_dgl(name, libs) {
 def unpack_dgl(name, libs) {
   unstash name
   echo "Unpacked ${libs} from ${name}"
-  sh "unzip _deps/dgl*.whl -d _deps"
+  dir("_deps") {
+    sh "unzip dgl*.whl"
+  }
 }
 
 def build_linux(dev) {

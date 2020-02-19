@@ -17,7 +17,7 @@ if [ $# -ne 2 ]; then
 fi
 
 export DGLBACKEND=$1
-export PYTHONPATH=${PWD}/python:${PWD}/_deps/dgl:$PYTHONPATH
+export PYTHONPATH=${PWD}/python:${PWD}/_deps:$PYTHONPATH
 export DGL_DOWNLOAD_DIR=${PWD}
 export TF_FORCE_GPU_ALLOW_GROWTH=true
 
