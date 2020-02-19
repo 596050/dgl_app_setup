@@ -21,5 +21,4 @@ if [ "$dev" == "gpu" ]; then
 else
   pip download dgl --pre --no-deps
 fi
-mv dgl*.whl dgl.whl
 popd

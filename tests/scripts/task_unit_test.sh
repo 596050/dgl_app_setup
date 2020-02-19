@@ -29,5 +29,6 @@ else
 fi
 
 conda activate ${DGLBACKEND}-ci
+pip install _deps/dgl*.whl
 
 python3 -m pytest -v --junitxml=pytest_unit.xml tests/unittests || fail "unittests"
