@@ -2,7 +2,8 @@
 SETLOCAL EnableDelayedExpansion
 
 PUSHD _deps
-unzip dgl.whl
+REN dgl.whl dgl-whl.zip
+powershell -command "Expand-Archive dgl-whl.zip ."
 POPD
 
 ENDLOCAL
