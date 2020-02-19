@@ -31,7 +31,7 @@ def unpack_dgl(name, libs) {
     if (isUnix()) {
       sh "unzip dgl.whl"
     } else {
-      bat "unzip dgl.whl"
+      bat "CALL tests\\scripts\\unzip_dgl.bat"
     }
   }
 }
