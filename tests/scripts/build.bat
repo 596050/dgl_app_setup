@@ -1,7 +1,12 @@
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
 
-pip install -y dgl --pre
+DEL /S /Q _deps
+MD _deps
+
+PUSHD _deps
+pip download dgl --pre --no-deps
+POPD
 
 ENDLOCAL
 EXIT /B

@@ -12,13 +12,13 @@ dev=$1
 set -e
 . /opt/conda/etc/profile.d/conda.sh
 
-for backend in pytorch mxnet tensorflow
-do
-  conda activate "${backend}-ci"
-  # install dgl nightly-build
-  if [ "$dev" == "gpu" ]; then
-    pip install -y dgl-cu101 --pre
-  else
-    pip install -y dgl --pre
-  fi
-done
+rm -rf _deps
+mkdir _deps
+pushd _deps
+conda activate "pytorch-ci"
+if [ "$dev" == "gpu" ]; then
+  pip download dgl-cu101 --pre --no-deps
+else
+  pip download dgl --pre --no-deps
+fi
+popd
