@@ -27,12 +27,10 @@ def pack_dgl(name, libs) {
 def unpack_dgl(name, libs) {
   unstash name
   echo "Unpacked ${libs} from ${name}"
-  dir("_deps") {
-    if (isUnix()) {
-      sh "unzip dgl.whl"
-    } else {
-      bat "CALL tests\\scripts\\unzip_dgl.bat"
-    }
+  if (isUnix()) {
+    sh "unzip _deps/dgl.whl -d _deps"
+  } else {
+    bat "CALL tests\\scripts\\unzip_dgl.bat"
   }
 }
 
