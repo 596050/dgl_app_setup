@@ -56,8 +56,8 @@ def unit_test_linux(backend, dev) {
 
 def unit_test_win64(backend, dev) {
   init_git_win64()
-  unstash name
-  echo "Unpacked ${libs} from ${name}"
+  unstash "app-${dev}-win64"
+  echo "Unpacked ${app_win64_libs} from app-${dev}-win64"
   dir("_deps") {
     sh "dir"
     sh "unzip dgl.whl"
