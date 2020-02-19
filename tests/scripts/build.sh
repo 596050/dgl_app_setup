@@ -10,6 +10,7 @@ fi
 dev=$1
 
 set -e
+ls -la /opt
 . /opt/conda/etc/profile.d/conda.sh
 
 rm -rf _deps
