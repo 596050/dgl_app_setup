@@ -109,7 +109,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/${app}-ci-cpu:latest" 
+              image "dgllib/${app}-ci-cpu:02192020" 
             }
           }
           steps {
@@ -125,7 +125,7 @@ pipeline {
           agent {
             docker {
               label "linux-cpu-node"
-              image "dgllib/${app}-ci-gpu:latest"
+              image "dgllib/${app}-ci-gpu:02192020"
               //args "-u root"
             }
           }
@@ -160,7 +160,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/${app}-ci-cpu:latest" 
+              image "dgllib/${app}-ci-cpu:02192020" 
             }
           }
           stages {
@@ -180,7 +180,7 @@ pipeline {
           agent { 
             docker { 
               label "linux-gpu-node"
-              image "dgllib/${app}-ci-gpu:latest" 
+              image "dgllib/${app}-ci-gpu:02192020" 
               args "--runtime nvidia"
             }
           }
@@ -202,7 +202,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/${app}-ci-cpu:latest" 
+              image "dgllib/${app}-ci-cpu:02192020" 
             }
           }
           stages {
@@ -252,7 +252,7 @@ pipeline {
           agent {
             docker {
               label "linux-gpu-node"
-              image "dgllib/${app}-ci-gpu:latest"
+              image "dgllib/${app}-ci-gpu:02192020"
               args "--runtime nvidia"
             }
           }
@@ -279,7 +279,7 @@ pipeline {
           agent { 
             docker {
               label "linux-cpu-node"
-              image "dgllib/${app}-ci-cpu:latest" 
+              image "dgllib/${app}-ci-cpu:02192020" 
             }
           }
           stages {
@@ -299,7 +299,7 @@ pipeline {
           agent {
             docker {
               label "linux-gpu-node" 
-              image "dgllib/${app}-ci-gpu:latest"
+              image "dgllib/${app}-ci-gpu:02192020"
               args "--runtime nvidia"
             }
           }
