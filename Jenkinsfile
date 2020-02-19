@@ -126,7 +126,7 @@ pipeline {
             docker {
               label "linux-cpu-node"
               image "dgllib/${app}-ci-gpu:latest"
-              args "-u root"
+              //args "-u root"
             }
           }
           steps {
