@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
-app_linux_libs = "_deps/**"
+app_linux_libs = "_deps/dgl*.whl"
 // Currently Windows is not working with Cython yet
-app_win64_libs = "_deps\\**"
+app_win64_libs = "_deps\\dgl*.whl"
 
 app = "myapp"
 
@@ -27,6 +27,7 @@ def pack_dgl(name, libs) {
 def unpack_dgl(name, libs) {
   unstash name
   echo "Unpacked ${libs} from ${name}"
+  sh "unzip _deps/dgl*.whl -d _deps"
 }
 
 def build_linux(dev) {
