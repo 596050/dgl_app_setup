@@ -130,7 +130,6 @@ pipeline {
             }
           }
           steps {
-            sh "nvidia-smi"
             build_linux("gpu")
           }
           post {
@@ -188,6 +187,7 @@ pipeline {
           stages {
             stage("Unit test") {
               steps {
+                sh "nvidia-smi"
                 unit_test_linux("tensorflow", "gpu")
               }
             }
