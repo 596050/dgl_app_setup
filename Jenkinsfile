@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
-app_linux_libs = "_deps"
+app_linux_libs = "_deps/**"
 // Currently Windows is not working with Cython yet
-app_win64_libs = "_deps"
+app_win64_libs = "_deps\\**"
 
 app = "myapp"
 
@@ -18,13 +18,13 @@ def init_git_win64() {
 }
 
 // pack libraries for later use
-def pack_lib(name, libs) {
+def pack_dgl(name, libs) {
   echo "Packing ${libs} into ${name}"
   stash includes: libs, name: name
 }
 
 // unpack libraries saved before
-def unpack_lib(name, libs) {
+def unpack_dgl(name, libs) {
   unstash name
   echo "Unpacked ${libs} from ${name}"
 }
@@ -32,7 +32,7 @@ def unpack_lib(name, libs) {
 def build_linux(dev) {
   init_git()
   sh "bash tests/scripts/build.sh ${dev}"
-  pack_lib("app-${dev}-linux", app_linux_libs)
+  pack_dgl("app-${dev}-linux", app_linux_libs)
 }
 
 def build_win64(dev) {
@@ -40,12 +40,12 @@ def build_win64(dev) {
    * CMake and Python/pip/setuptools etc. */
   init_git_win64()
   bat "CALL tests\\scripts\\build.bat"
-  pack_lib("app-${dev}-win64", app_win64_libs)
+  pack_dgl("app-${dev}-win64", app_win64_libs)
 }
 
 def unit_test_linux(backend, dev) {
   init_git()
-  unpack_lib("app-${dev}-linux", app_linux_libs)
+  unpack_dgl("app-${dev}-linux", app_linux_libs)
   timeout(time: 10, unit: 'MINUTES') {
     sh "bash tests/scripts/task_unit_test.sh ${backend} ${dev}"
   }
@@ -53,7 +53,7 @@ def unit_test_linux(backend, dev) {
 
 def unit_test_win64(backend, dev) {
   init_git_win64()
-  unpack_lib("app-${dev}-win64", app_win64_libs)
+  unpack_dgl("app-${dev}-win64", app_win64_libs)
   timeout(time: 2, unit: 'MINUTES') {
     bat "CALL tests\\scripts\\task_unit_test.bat ${backend}"
   }
@@ -61,7 +61,7 @@ def unit_test_win64(backend, dev) {
 
 def example_test_linux(backend, dev) {
   init_git()
-  unpack_lib("app-${dev}-linux", app_linux_libs)
+  unpack_dgl("app-${dev}-linux", app_linux_libs)
   timeout(time: 20, unit: 'MINUTES') {
     sh "bash tests/scripts/task_example_test.sh ${dev}"
   }
@@ -69,7 +69,7 @@ def example_test_linux(backend, dev) {
 
 def example_test_win64(backend, dev) {
   init_git_win64()
-  unpack_lib("app-${dev}-win64", app_win64_libs)
+  unpack_dgl("app-${dev}-win64", app_win64_libs)
   timeout(time: 20, unit: 'MINUTES') {
     bat "CALL tests\\scripts\\task_example_test.bat ${dev}"
   }
@@ -77,7 +77,7 @@ def example_test_win64(backend, dev) {
 
 //def tutorial_test_linux(backend) {
 //  init_git()
-//  unpack_lib("app-cpu-linux", app_linux_libs)
+//  unpack_dgl("app-cpu-linux", app_linux_libs)
 //  timeout(time: 20, unit: 'MINUTES') {
 //    sh "bash tests/scripts/task_${backend}_tutorial_test.sh"
 //  }
